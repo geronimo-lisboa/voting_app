@@ -33,10 +33,13 @@ class Product extends React.Component{
       );
     }
 }
-////A lista de produtos
+////A lista de produtos (pág 50)
 class ProductList extends React.Component {
   render() {
-    const productComponents = Seed.products.map((produto) => (
+    const sortedProducts = Seed.products.sort((a,b)=>(b.votes - a.votes));
+    //map mapeia uma array para outra. Para cada elemento da array A ele invoca
+    //a função passada como parâmetro, pega o retorno dela e o poe em uma array B.
+    const productComponents = sortedProducts.map((produto) => (
       <div className='ui unstackable items'>
         <Product
           id={produto.id}
