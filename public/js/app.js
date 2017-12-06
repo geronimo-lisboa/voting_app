@@ -54,16 +54,33 @@ class ProductList extends React.Component {
     this.state={
       products : [],
     };
+    this.handleProductUpVote = this.handleProductUpVote.bind(this);
   }
   //Pelo que vi é invocado depois do componente ser renderizado.
   componentDidMount(){
     this.setState({products : Seed.products});//Mudança de estado TEM que passar
     //pelo setState pq esse método tem mecânicas internas importantes do ciclo de
-    //vida de um componente
+    //vida de um componente. Quando esse método for invocado o estado do componente
+    //vai mudar e o react vai renderizar.
   }
   //Handler da votação - registra os votos.
   handleProductUpVote(productId){
-    console.log(productId + ' foi votado');
+    //map gera uma nova array. isso é necesário pq a array em state deve ser
+    //considerada imutável.
+    const modifiedProducts = this.state.products.map((produto)=>{
+        if(produto.id === productId){
+          //object.assign copia objetos.
+          return Object.assign({}, produto,{
+            votes: produto.votes+1,
+          });
+        }else{
+          return produto;
+        }
+    });
+    //Agora eu seto o estado com a variável imutável.
+    this.setState({
+      products:modifiedProducts,
+    });
   }
   //O método que renderiza o componente
   render() {
