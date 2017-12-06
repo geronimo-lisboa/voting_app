@@ -48,6 +48,20 @@ class Product extends React.Component{
 }
 ////A lista de produtos (pág 50)
 class ProductList extends React.Component {
+  //O construtor de ProductList inializa o estado do componente como vazio.
+  constructor(props){
+    super(props);
+    this.state={
+      products : [],
+    };
+  }
+  //Pelo que vi é invocado depois do componente ser renderizado.
+  componentDidMount(){
+    this.setState({products : Seed.products});//Mudança de estado TEM que passar
+    //pelo setState pq esse método tem mecânicas internas importantes do ciclo de
+    //vida de um componente
+  }
+  //Handler da votação - registra os votos.
   handleProductUpVote(productId){
     console.log(productId + ' foi votado');
   }
@@ -57,7 +71,7 @@ class ProductList extends React.Component {
     //e deve retornar a comparação entre eles. Se resultado < 0, A vem primeiro,
     //se igual a 0 A e B não tem suas posições trocadas, se > 0 B vem primeiro.
     //Para valores numericos B-A é uma forma fácil de fazer a comparação.
-    const sortedProducts = Seed.products.sort((a,b)=>(b.votes - a.votes));
+    const sortedProducts = this.state.products.sort((a,b)=>(b.votes - a.votes));
     //map mapeia uma array para outra. Para cada elemento da array A ele invoca
     //a função passada como parâmetro, pega o retorno dela e o poe em uma array B.
     const productComponents = sortedProducts.map((produto) => (
