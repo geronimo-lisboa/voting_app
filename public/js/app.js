@@ -1,5 +1,18 @@
 ////Os produtos que serão listados
 class Product extends React.Component{
+    //Construtor do objeto. Uso ele pra fazer o bind da variavel THIS ao método
+    //handleUpVote, pra que a this exista lá. Sem isso this estaria bindada a null
+    constructor(props){
+      super(props);
+      this.handleUpVote=this.handleUpVote.bind(this);
+    }
+    //handler da função de votação. Não posso simplesmente passar a função que
+    //me foi dada como prop pelo pai do componente pq aí eu não teria o id do
+    //componente, que varia de filho pra filho.
+    handleUpVote(){
+      this.props.onVote(this.props.id);
+    }
+    //a função que renderiza
     render(){
       return(
         <div className='item'>
@@ -8,7 +21,7 @@ class Product extends React.Component{
           </div>
           <div className='middle aligned content'>
             <div className='header'>
-              <a>
+              <a onClick={this.handleUpVote}>
                 <i className='large caret up icon' />
               </a>
               {this.props.votes}
@@ -35,7 +48,15 @@ class Product extends React.Component{
 }
 ////A lista de produtos (pág 50)
 class ProductList extends React.Component {
+  handleProductUpVote(productId){
+    console.log(productId + ' foi votado');
+  }
+  //O método que renderiza o componente
   render() {
+    //Sort retorna a array sortida. A função de sortimento recebe dos valores
+    //e deve retornar a comparação entre eles. Se resultado < 0, A vem primeiro,
+    //se igual a 0 A e B não tem suas posições trocadas, se > 0 B vem primeiro.
+    //Para valores numericos B-A é uma forma fácil de fazer a comparação.
     const sortedProducts = Seed.products.sort((a,b)=>(b.votes - a.votes));
     //map mapeia uma array para outra. Para cada elemento da array A ele invoca
     //a função passada como parâmetro, pega o retorno dela e o poe em uma array B.
@@ -49,6 +70,7 @@ class ProductList extends React.Component {
           votes={produto.votes}
           submitterAvatarUrl={produto.submitterAvatarUrl}
           productImageUrl={produto.productImageUrl}
+          onVote={this.handleProductUpVote}
           />
       </div>
     ));
