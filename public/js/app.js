@@ -36,8 +36,7 @@ class Product extends React.Component{
 ////A lista de produtos
 class ProductList extends React.Component {
   render() {
-    const produto = Seed.products[1];
-    return (
+    const productComponents = Seed.products.map((produto) => (
       <div className='ui unstackable items'>
         <Product
           id={produto.id}
@@ -49,7 +48,12 @@ class ProductList extends React.Component {
           productImageUrl={produto.productImageUrl}
           />
       </div>
-    );
+    ));
+    return (
+      <div className='ui unstackable items'>
+        {productComponents}
+      </div>
+    )
   }
 }
 //É a renderizaçaõ do DOM do react na página. O componte Foobar, definido pela
