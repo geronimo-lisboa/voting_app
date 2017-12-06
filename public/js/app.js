@@ -1,17 +1,9 @@
 ////Os produtos que serão listados
 class Product extends React.Component{
-    //Construtor do objeto. Uso ele pra fazer o bind da variavel THIS ao método
-    //handleUpVote, pra que a this exista lá. Sem isso this estaria bindada a null
-    constructor(props){
-      super(props);
-      this.handleUpVote=this.handleUpVote.bind(this);
-    }
     //handler da função de votação. Não posso simplesmente passar a função que
     //me foi dada como prop pelo pai do componente pq aí eu não teria o id do
     //componente, que varia de filho pra filho.
-    handleUpVote(){
-      this.props.onVote(this.props.id);
-    }
+    handleUpVote = ()=>(this.props.onVote(this.props.id));
     //a função que renderiza
     render(){
       return(
@@ -48,23 +40,12 @@ class Product extends React.Component{
 }
 ////A lista de produtos (pág 50)
 class ProductList extends React.Component {
-  //O construtor de ProductList inializa o estado do componente como vazio.
-  constructor(props){
-    super(props);
-    this.state={
-      products : [],
-    };
-    this.handleProductUpVote = this.handleProductUpVote.bind(this);
-  }
-  //Pelo que vi é invocado depois do componente ser renderizado.
-  componentDidMount(){
-    this.setState({products : Seed.products});//Mudança de estado TEM que passar
-    //pelo setState pq esse método tem mecânicas internas importantes do ciclo de
-    //vida de um componente. Quando esse método for invocado o estado do componente
-    //vai mudar e o react vai renderizar.
-  }
-  //Handler da votação - registra os votos.
-  handleProductUpVote(productId){
+  //Seta o estado inicial
+  state = {
+    products : [],
+  };
+  //Lida com o usuário votar em um produto.
+  handleProductUpVote = (productId) => {
     //map gera uma nova array. isso é necesário pq a array em state deve ser
     //considerada imutável.
     const modifiedProducts = this.state.products.map((produto)=>{
@@ -81,6 +62,14 @@ class ProductList extends React.Component {
     this.setState({
       products:modifiedProducts,
     });
+  }
+
+  //Pelo que vi é invocado depois do componente ser renderizado.
+  componentDidMount(){
+    this.setState({products : Seed.products});//Mudança de estado TEM que passar
+    //pelo setState pq esse método tem mecânicas internas importantes do ciclo de
+    //vida de um componente. Quando esse método for invocado o estado do componente
+    //vai mudar e o react vai renderizar.
   }
   //O método que renderiza o componente
   render() {
